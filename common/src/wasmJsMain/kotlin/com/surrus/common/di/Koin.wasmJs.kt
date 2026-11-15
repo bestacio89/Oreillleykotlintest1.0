@@ -1,0 +1,29 @@
+package dev.johnoreilly.common.di
+
+import app.cash.sqldelight.driver.worker.createDefaultWebWorkerDriver
+import dev.johnoreilly.peopleinspace.db.PeopleInSpaceDatabase
+import dev.johnoreilly.peopleinspace.db.PeopleInSpaceDatabase.Companion.invoke
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.js.Js
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
+import org.koin.core.scope.Scope
+
+internal actual class ContextWrapper
+
+@Module
+internal actual class NativeModule {
+
+    @Single
+    actual fun providesContextWrapper(scope : Scope) : ContextWrapper = ContextWrapper()
+
+    @Single
+    actual fun getHttpClientEngine(): HttpClientEngine = Js.create()
+
+    @Single
+    actual fun getPeopleInSpaceDatabaseWrapper(ctx : ContextWrapper): PeopleInSpaceDatabaseWrapper {
+        val driver = createDefaultWebWorkerDriver()
+        return PeopleInSpaceDatabaseWrapper(driver, PeopleInSpaceDatabase(driver))
+    }
+
+}

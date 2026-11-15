@@ -1,0 +1,32 @@
+# Shared by the Android and iOS apps: CI passes APP_ID with -e
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+
+- assertVisible: "People in Space"
+
+- tapOn: "ISS Position"
+# Allow for slow CI emulators (the default assertVisible wait occasionally times out)
+- extendedWaitUntil:
+    visible: "ISS Position"
+    timeout: 30000
+
+- tapOn: "People"
+- assertVisible: "People in Space"
+# The people list comes from a live API
+- extendedWaitUntil:
+    visible:
+      id: "person0"
+    timeout: 30000
+
+# The astronaut photos download after the text is up, and the screen can sit still in between,
+# so waitForAnimationToEnd alone returns too early. Maestro has no sleep: wait for text that never
+# appears (optional, so its timeout just continues) to give them time, then let the screen settle.
+- extendedWaitUntil:
+    visible: "maestro-image-delay-never-shown"
+    timeout: 10000
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 15000
+- takeScreenshot: PeopleInSpace
