@@ -1,0 +1,34 @@
+package dev.johnoreilly.peopleinspace
+
+import dev.johnoreilly.common.remote.Assignment
+import dev.johnoreilly.common.remote.IssPosition
+import dev.johnoreilly.common.remote.OrbitPoint
+import dev.johnoreilly.common.repository.PeopleInSpaceRepositoryInterface
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
+
+class PeopleInSpaceRepositoryFake: PeopleInSpaceRepositoryInterface {
+    override val initialSyncCompleted: StateFlow<Boolean> = MutableStateFlow(true)
+
+    val peopleList = listOf(Assignment("Apollo 11", "Neil Armstrong"),
+        Assignment("Apollo 11", "Buzz Aldrin"))
+
+    val issPosition = IssPosition(53.2743394, -9.0514163)
+
+    override fun fetchPeopleAsFlow(): Flow<List<Assignment>> {
+        return flowOf(peopleList)
+    }
+
+    override fun pollISSPosition(): Flow<IssPosition> {
+        return flowOf(issPosition)
+    }
+
+    override suspend fun fetchISSFuturePosition(): List<OrbitPoint> {
+        return listOf(OrbitPoint(System.currentTimeMillis() / 1000, issPosition.latitude, issPosition.longitude))
+    }
+
+    override suspend fun fetchAndStorePeople() {
+    }
+}
