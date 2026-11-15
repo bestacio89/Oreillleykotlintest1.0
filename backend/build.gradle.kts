@@ -1,0 +1,58 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
+plugins {
+    kotlin("multiplatform")
+    kotlin("plugin.serialization")
+    alias(libs.plugins.shadowPlugin)
+}
+
+kotlin {
+    jvm() {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+        }
+        binaries {
+            executable {
+                mainClass.set("ServerKt")
+            }
+        }
+    }
+
+    sourceSets {
+        jvmMain.dependencies {
+            implementation(libs.kotlinx.coroutines)
+            implementation(libs.kotlinx.serialization.core)
+
+            implementation("io.ktor:ktor-server-core:3.6.1")
+            implementation("io.ktor:ktor-server-netty:3.6.1")
+            implementation("io.ktor:ktor-server-cors:3.6.1")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:3.6.1")
+            implementation("io.ktor:ktor-server-content-negotiation:3.6.1")
+
+            implementation("io.ktor:ktor-server-swagger:3.6.1")
+            implementation("io.ktor:ktor-server-routing-openapi:3.6.1")
+
+            implementation("ch.qos.logback:logback-classic:1.6.6")
+
+            implementation(libs.ktor.client.java)
+            implementation(libs.ktor.client.content.negotiation)
+
+            implementation(projects.common)
+        }
+
+        jvmTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.ktor.client.mock)
+        }
+    }
+}
+
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    manifest {
+        attributes["Main-Class"] = "ServerKt"
+    }
+}
+
