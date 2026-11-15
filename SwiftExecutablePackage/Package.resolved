@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "kmp-nativecoroutines",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rickclephas/KMP-NativeCoroutines.git",
+      "state" : {
+        "revision" : "94b7047bfc08061706807f594120a7de810e9901",
+        "version" : "1.0.5"
+      }
+    },
+    {
+      "identity" : "peopleinspacepackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/joreilly/PeopleInSpacePackage",
+      "state" : {
+        "branch" : "main",
+        "revision" : "af7f4e6adbc5f9016ec4b035e64a9aa696d1df34"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift.git",
+      "state" : {
+        "revision" : "9dcaa4b333db437b0fbfaf453fad29069044a8b4",
+        "version" : "6.6.0"
+      }
+    }
+  ],
+  "version" : 2
+}
