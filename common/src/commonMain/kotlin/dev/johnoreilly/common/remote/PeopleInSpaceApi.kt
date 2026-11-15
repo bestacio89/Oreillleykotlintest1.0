@@ -1,0 +1,32 @@
+package dev.johnoreilly.common.remote
+
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import kotlinx.serialization.Serializable
+import org.koin.core.annotation.Single
+import org.koin.core.component.KoinComponent
+
+@Serializable
+data class AstroResult(val message: String, val number: Int, val people: List<Assignment>)
+
+@Serializable
+data class Assignment(
+    val craft: String,
+    val name: String,
+    var personImageUrl: String? = "",
+    var personBio: String? = "",
+    var nationality: String = "",
+)
+
+@Serializable
+data class IssPosition(val latitude: Double, val longitude: Double)
+
+@Single
+class PeopleInSpaceApi(private val client: HttpClient) : KoinComponent {
+    var baseUrl = "https://people-in-space-proxy.ew.r.appspot.com"
+    var baseIssPositionUrl = "https://api.wheretheiss.at"
+
+    suspend fun fetchPeople() = client.get("$baseUrl/astros.json").body<AstroResult>()
+    suspend fun fetchISSPosition() = client.get("$baseIssPositionUrl/v1/satellites/25544").body<IssPosition>()
+}
